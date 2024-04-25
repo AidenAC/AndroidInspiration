@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.cis436.project4.databinding.FragmentFirstBinding
+import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -31,6 +33,14 @@ class FirstFragment : Fragment() {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        val resultObserver = Observer<JSONObject> {
+            result -> if (result.length() != 0) {
+                binding.tvQuote.text = result.get("q").toString()
+                binding.tvAuthor.text = result.get("a").toString()
+            }
+        }
+        viewModel.getQuote().observe(viewLifecycleOwner, resultObserver)
 
         binding.btGetQuote.setOnClickListener {
             getQuote()
@@ -58,7 +68,6 @@ class FirstFragment : Fragment() {
             { response ->
                 Log.i("Get Quote", response.toString())
                 viewModel.setQuote(response.toString())
-                binding.tvQuote.text = viewModel.getQuote()
             },
             {
                 Log.i("Get Quote", "That did not work!")
