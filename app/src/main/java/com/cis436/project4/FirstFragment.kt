@@ -8,20 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.load
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.cis436.project4.databinding.FragmentFirstBinding
 import org.json.JSONObject
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
@@ -30,20 +26,20 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        val resultObserver = Observer<JSONObject> {
+        val quoteObserver = Observer<JSONObject> {
             result -> if (result.length() != 0) {
                 binding.tvQuote.text = result.get("q").toString()
                 binding.tvAuthor.text = result.get("a").toString()
             }
         }
-        viewModel.getQuote().observe(viewLifecycleOwner, resultObserver)
+        viewModel.getQuote().observe(viewLifecycleOwner, quoteObserver)
 
         binding.btGetQuote.setOnClickListener {
             getQuote()
+            binding.imageView.load("https://picsum.photos/600")
         }
 
         return binding.root
@@ -59,7 +55,7 @@ class FirstFragment : Fragment() {
     }
 
     private fun getQuote() {
-        val url = "https://zenquotes.io/api" + "/random"
+        val url = "https://zenquotes.io/api/" + viewModel.getMode()
         val queue = Volley.newRequestQueue(this.context)
 
         val stringRequest = StringRequest(

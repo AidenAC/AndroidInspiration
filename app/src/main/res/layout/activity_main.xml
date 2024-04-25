@@ -17,6 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView2"
+            android:name="com.cis436.project4.ModeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
