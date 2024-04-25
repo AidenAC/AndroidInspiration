@@ -14,6 +14,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.cis436.project4.databinding.FragmentFirstBinding
 import org.json.JSONObject
+import kotlin.random.Random
 
 class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
@@ -39,7 +40,9 @@ class FirstFragment : Fragment() {
 
         binding.btGetQuote.setOnClickListener {
             getQuote()
-            binding.imageView.load("https://picsum.photos/600")
+
+            val id = Random.nextInt(1, 601)
+            binding.imageView.load("https://picsum.photos/id/${id}/600")
         }
 
         return binding.root
