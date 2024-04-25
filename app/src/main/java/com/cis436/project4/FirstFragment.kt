@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -49,6 +50,10 @@ class FirstFragment : Fragment() {
 
         binding.btSave.setOnClickListener {
             sqliteHelper.addQuote(binding.tvQuote.text.toString(), binding.tvAuthor.text.toString())
+        }
+
+        binding.btNavSaved.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
         return binding.root
