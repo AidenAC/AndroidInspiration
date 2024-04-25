@@ -22,6 +22,7 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var sqliteHelper : SQLiteHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +30,7 @@ class FirstFragment : Fragment() {
     ): View? {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        sqliteHelper = SQLiteHelper(requireActivity())
 
         val quoteObserver = Observer<JSONObject> {
             result -> if (result.length() != 0) {
@@ -43,6 +45,10 @@ class FirstFragment : Fragment() {
 
             val id = Random.nextInt(1, 601)
             binding.imageView.load("https://picsum.photos/id/${id}/600")
+        }
+
+        binding.btSave.setOnClickListener {
+            sqliteHelper.addQuote(binding.tvQuote.text.toString(), binding.tvAuthor.text.toString())
         }
 
         return binding.root
